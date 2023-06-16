@@ -1,0 +1,17 @@
+export const Translations = [
+  { cc: "Cedula" },
+  { name: "Nombres" },
+  { last_name: "Apellidos" },
+  { email: "Correo Electrónico" },
+  { phone: "Télefono" },
+  { document_type: "Tipo de Documento" },
+  { dni: "Cedula" },
+  { terms: "Términos y condiciones" },
+  { address: "Dirección" },
+  { country: "País" },
+  { city: "" },
+  { neighborhood: "Barrio" },
+  { state: "Departamento/estado" },
+  { lat: "Latitud" },
+  { lng: "Longitud" },
+]

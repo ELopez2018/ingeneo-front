@@ -1,0 +1,232 @@
+<div class="new-client__icon"><mat-icon>person_add</mat-icon></div>
+<div class="container px-2 mt-3" *ngIf="!showForm">
+  <div class="row">
+    <div class="input-group mb-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar"
+        aria-label="Buscar"
+        aria-describedby="button-addon2"
+      />
+      <button
+        class="btn btn-primary"
+        type="button"
+        id="button-addon2"
+        (click)="filtrar()"
+      >
+        Filtrar
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <fieldset class="">
+      <legend class="">Clientes registrados</legend>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col" sortable="name">Documento</th>
+            <th scope="col" sortable="name">Nombres</th>
+            <th scope="col" sortable="area">Apellidos</th>
+            <th scope="col" sortable="population">Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of clientList">
+            <td>
+              {{ item.documentNumber }}
+            </td>
+            <td>
+              {{ item.names }}
+            </td>
+            <td>{{ item.lastNames }}</td>
+            <td class="text-center">
+              <button
+                class="me-2"
+                mat-mini-fab
+                color="primary"
+                aria-label="Seleccionar"
+                title="Seleccionar"
+                (click)="userClicked(item)"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+  </div>
+  <div class="row my-3">
+    <div class="col-12 text-center">
+      <button (click)="new()" class="me-4" mat-raised-button color="primary">
+        Nuevo
+      </button>
+      <button routerLink="/sistema/inicio" mat-raised-button color="warn">
+        Regresar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container px-2 mt-3" [formGroup]="form" *ngIf="showForm">
+  <fieldset class="fieldset mb-3 p-2">
+    <legend class="legend">Registrar cliente</legend>
+    <div class="row g-2 mt-1">
+      <div class="col-md">
+        <div class="form-floating">
+          <select
+            #documentType
+            formControlName="documentType"
+            class="form-select"
+            id="documentType"
+            name="documentType"
+          >
+            <option [value]="item.value" *ngFor="let item of documentSelectBox">
+              {{ item.description }}
+            </option>
+          </select>
+          <label for="documentType">Tipo de Documento</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(documentType.name)"
+            >{{ controlError(documentType.name) }}</mat-error
+          >
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            #numberdoc
+            name="documentNumber"
+            formControlName="documentNumber"
+            type="number"
+            class="form-control"
+            id="documentNumber"
+            placeholder="Número de documento"
+          />
+          <label for="documentNumber">Número de Documento</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(numberdoc.name)"
+            >{{ controlError(numberdoc.name) }}</mat-error
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mt-1">
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            #names
+            formControlName="names"
+            type="text"
+            class="form-control"
+            id="names"
+            placeholder="Nombres"
+            name="names"
+            capitalizeInput
+          />
+          <label for="names">Nombres</label>
+          <mat-error class="mat-hint-error" *ngIf="controlError(names.name)">{{
+            controlError(names.name)
+          }}</mat-error>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            #lastNames
+            formControlName="lastNames"
+            type="text"
+            class="form-control"
+            id="lastNames"
+            placeholder="Apellidos"
+            name="lastNames"
+            capitalizeInput
+          />
+
+          <label for="lastNames">Apellidos</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(lastNames.name)"
+            >{{ controlError(lastNames.name) }}</mat-error
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mt-1">
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            #address
+            capitalizeInput
+            formControlName="address"
+            type="text"
+            class="form-control"
+            id="address"
+            placeholder="Dirección"
+            name="address"
+          />
+          <label for="address">Dirección</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(address.name)"
+            >{{ controlError(address.name) }}</mat-error
+          >
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            name="cellphone"
+            formControlName="cellphone"
+            type="number"
+            class="form-control"
+            id="cellphone"
+            placeholder="Número de teléfono"
+            #cellphone
+          />
+          <label for="cellphone">Teléfono</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(cellphone.name)"
+            >{{ controlError(cellphone.name) }}</mat-error
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mt-1">
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            name="email"
+            capitalizeInput
+            #email
+            formControlName="email"
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Email"
+          />
+          <label for="email">Correo Electónico</label>
+          <mat-error class="mat-hint-error" *ngIf="controlError(email.name)">{{
+            controlError(email.name)
+          }}</mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-6 text-center">
+        <button (click)="save()" mat-raised-button color="primary">
+          Guardar
+        </button>
+      </div>
+      <div class="col-6 text-center">
+        <button mat-raised-button (click)="cancel()" color="warn">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </fieldset>
+</div>
