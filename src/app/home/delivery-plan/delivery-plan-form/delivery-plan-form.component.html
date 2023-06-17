@@ -167,13 +167,32 @@
             name="guideNumber"
             #guideNumber
             formControlName="guideNumber"
-            type="number"
+            type="text"
             class="form-control"
             id="guideNumber"
+            [maxLength]="10"
           />
           <label for="guideNumber">Numero de guía </label>
           <mat-error class="mat-hint-error" *ngIf="controlError(guideNumber.name)">{{
             controlError(guideNumber.name)
+          }}</mat-error>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating">
+          <input
+            name="discount"
+            #discount
+            formControlName="discount"
+            type="text"
+            class="form-control"
+            readonly
+            id="discount"
+            [maxLength]="10"
+          />
+          <label for="discount">Descuento </label>
+          <mat-error class="mat-hint-error" *ngIf="controlError(discount.name)">{{
+            controlError(discount.name)
           }}</mat-error>
         </div>
       </div>

@@ -14,15 +14,14 @@ import { NotificationsService } from 'src/app/core/services/notifications/notifi
   styleUrls: ['./delivery-plan-form.component.scss']
 })
 export class DeliveryPlanFormComponent implements OnInit {
-  @Input()  showForm: boolean = true
+  @Input() showForm: boolean = true
   form: FormGroup = new FormGroup({})
   documentSelectBox = TypesTransport
   control!: AbstractControl | null;
   label: string = ''
   dirty: any
-
   logisticsType = "Placa del vehículo ";
-  formatValid: string ='AAA123'
+  formatValid: string = 'AAA123'
   lisencePlate = new FormControl(null, [Validators.pattern(/^([A-Z]{3}[0-9]{3})/gm)]);
   constructor(
     private notificationsService: NotificationsService,
@@ -31,57 +30,75 @@ export class DeliveryPlanFormComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       typeLogistic: new FormControl(null, [Validators.required]),
-      productType: new FormControl(null, [Validators.required, Validators.minLength(8)]),
-      productQty: new FormControl(null, [Validators.required, Validators.minLength(3)]),
-      registerDate: new FormControl(null, [Validators.required, Validators.minLength(3)]),
-      deliveryDate: new FormControl(null),
-      deliveryWarehouse: new FormControl(null, [Validators.required, Validators.minLength(10)]),
-      shippingPrice: new FormControl(null,),
-      guideNumber: new FormControl(null,),
+      productType: new FormControl(null, [Validators.required]),
+      productQty: new FormControl(null, [Validators.required]),
+      registerDate: new FormControl(null, [Validators.required]),
+      deliveryDate: new FormControl(null, [Validators.required]),
+      deliveryWarehouse: new FormControl(null, [Validators.required]),
+      shippingPrice: new FormControl(null, [Validators.required]),
+      discount: new FormControl('0.00',),
+      guideNumber: new FormControl(null, [Validators.required, Validators.maxLength(10), Validators.minLength(10)]),
       clienId: new FormControl(null,),
-      transportId: new FormControl(null,[Validators.required, Validators.pattern(/^([A-Z]{3}[0-9]{3})/gm)]),
+      transportId: new FormControl(null, [Validators.required, Validators.pattern(/^([A-Z]{3}[0-9]{3})/gm)]),
     })
   }
 
   ngOnInit(): void {
     this.form
-    .get('typeLogistic')
-    ?.valueChanges.subscribe(
-      (value) => {
-        this.form.get('transportId')?.clearValidators()
-        this.form.get('transportId')?.updateValueAndValidity()
-        if(value == 'Camiones'){
-          this.formatValid ='AAA123';
-          this.logisticsType = "Placa del vehículo";
-          this.form.get('transportId')?.addValidators([Validators.required, Validators.pattern(/^([A-Z]{3}[0-9]{3})/gm)])
+      .get('typeLogistic')
+      ?.valueChanges.subscribe(
+        (value) => {
+          this.form.get('transportId')?.clearValidators()
           this.form.get('transportId')?.updateValueAndValidity()
-        } else {
-          this.formatValid ='AAA1234A';
-          this.logisticsType = "Número de flota";
-          this.form.get('transportId')?.addValidators([Validators.required, Validators.pattern(/^([A-Z]{3}[0-9]{4}[A-Z]{1})/gm)])
-          this.form.get('transportId')?.updateValueAndValidity()
+          if (value == 'Camiones') {
+            this.formatValid = 'AAA123';
+            this.logisticsType = "Placa del vehículo";
+            this.form.get('transportId')?.addValidators([Validators.required, Validators.pattern(/^([A-Z]{3}[0-9]{3})/gm)])
+            this.form.get('transportId')?.updateValueAndValidity()
+          } else {
+            this.formatValid = 'AAA1234A';
+            this.logisticsType = "Número de flota";
+            this.form.get('transportId')?.addValidators([Validators.required, Validators.pattern(/^([A-Z]{3}[0-9]{4}[A-Z]{1})/gm)])
+            this.form.get('transportId')?.updateValueAndValidity()
+          }
         }
-      }
-    )
+      )
+
+    this.form
+      .get('shippingPrice')
+      ?.valueChanges.subscribe(
+        (value) => {
+          const values = this.form.value
+          let discount = 0;
+          if (this.logisticsType == "Placa del vehículo") {
+            discount = values.productQty > 10 ? values.shippingPrice * 0.05 : 0
+          } else {
+            discount = values.productQty > 10 ? values.shippingPrice * 0.03 : 0
+          }
+          console.log(discount);
+          this.form
+            .get('discount')?.setValue(discount)
+
+        })
   }
 
   filtrar() {
   }
-  showModal() {
+  async showModal() {
     const mensaje = 'El Cliente ' + this.form.value.names + ' ha sido registrado.'
-    this.notificationsService.info({ titulo: 'usuarios', mensaje, textButtonLeft: AppEnums.ok, icon: 'ok' });
+    await this.notificationsService.info({ titulo: 'usuarios', mensaje, textButtonLeft: AppEnums.ok, icon: 'ok' });
   }
 
-  showMessage(data: IMessageApi) {
+  async showMessage(data: IMessageApi) {
     const mensaje = data.description
-    this.notificationsService.info({ titulo: data.title ? data.title : "Informacion", mensaje, textButtonLeft: AppEnums.ok, icon: data.icon });
+    await this.notificationsService.info({ titulo: data.title ? data.title : "Informacion", mensaje, textButtonLeft: AppEnums.ok, icon: data.icon });
   }
   controlError(controlName: string): string | null {
     if (!this.form || !this.form.get(controlName)) { return '' }
     this.label = controlName;
     this.control = this.form.get(controlName);
     if (this.control) {
-      return (this.control.touched && this.control.invalid ) ? this.errorText : null
+      return (this.control.touched && this.control.invalid) ? this.errorText : null
     }
     return ''
   }
@@ -94,21 +111,18 @@ export class DeliveryPlanFormComponent implements OnInit {
     this.label = ''
     if (this.control.errors) {
       if (this.control.errors['required']) { msg = `El campo ${this.label} es requerido`; }
-      if (msg == '' && this.control.errors['minlength']) { msg = `El campo ${this.label} debe tener minimo ${this.control.errors['minlength'].requiredLength} caracteres`; }
-      if (msg == '' && this.control.errors['maxlength']) { msg = `El campo ${this.label} debe tener máximo ${this.control.errors['maxlength'].requiredLength} caracteres`; }
-      if (msg == '' && this.control.errors['max']) { msg = `El campo ${this.label} debe ser un año menor a ${this.control.errors['max'].max}`; }
-      if (msg == '' && this.control.errors['min']) { msg = `El campo ${this.label} debe ser un año mayor a ${this.control.errors['min'].min}`; }
-      if (msg == '' && this.control.errors['email']) { msg = `El campo ${this.label} debe tener un formato válido de correo electrónico`; }
-      if (msg == '' && this.control.errors['pattern']) { msg = `El campo ${this.label} debe tener un formato válido ${this.formatValid}`; }
-      if (msg == '' && this.control.errors) { msg = `El campo ${this.label} contiene errores.`; }
+      if (this.control.errors['minlength']) { msg = `El campo ${this.label} debe tener minimo ${this.control.errors['minlength'].requiredLength} caracteres`; }
+      if (this.control.errors['maxlength']) { msg = `El campo ${this.label} debe tener máximo ${this.control.errors['maxlength'].requiredLength} caracteres`; }
+      if (this.control.errors['pattern']) { msg = `El campo ${this.label} debe tener un formato válido ${this.formatValid}`; }
+      if (msg == '' && this.control.errors) { msg += `El campo ${this.label} contiene errores.`; }
     }
     return msg;
   }
-  save() {
+  async save() {
     if (this.form.invalid) {
       this.form.updateValueAndValidity()
       const mensaje = 'Faltan datos'
-      this.notificationsService.info({ titulo: 'clientes', mensaje, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
+      await this.notificationsService.info({ titulo: 'clientes', mensaje, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
       return;
     }
     const data = this.form.value
