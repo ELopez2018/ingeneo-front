@@ -1,0 +1,214 @@
+<form class="mt-3" [formGroup]="form" *ngIf="showForm" >
+  <fieldset class="fieldset mb-3 p-2">
+    <legend class="legend">Plan de Entrega</legend>
+    <div class="row g-2 mt-1">
+      <div class="col-md">
+        <div class="form-floating">
+          <select
+            #typeLogistic
+            formControlName="typeLogistic"
+            class="form-select"
+            id="typeLogistic"
+            name="typeLogistic"
+          >
+            <option [value]="item.value" *ngFor="let item of documentSelectBox">
+              {{ item.description }}
+            </option>
+          </select>
+          <label for="typeLogistic">Tipo de logística</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(typeLogistic.name)"
+            >{{ controlError(typeLogistic.name) }}</mat-error
+          >
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            #productType
+            name="productType"
+            formControlName="productType"
+            type="text"
+            class="form-control"
+            id="productType"
+          />
+          <label for="productType">Tipo de Producto</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(productType.name)"
+            >{{ controlError(productType.name) }}</mat-error
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mt-1">
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            #productQty
+            formControlName="productQty"
+            type="number"
+            class="form-control"
+            id="productQty"
+            name="productQty"
+            capitalizeInput
+          />
+          <label for="productQty">Cantidad del producto</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(productQty.name)"
+            >{{ controlError(productQty.name) }}</mat-error
+          >
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            #registerDate
+            formControlName="registerDate"
+            type="date"
+            class="form-control"
+            id="registerDate"
+            placeholder="Apellidos"
+            name="registerDate"
+            capitalizeInput
+          />
+
+          <label for="registerDate">Fecha de registro</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(registerDate.name)"
+            >{{ controlError(registerDate.name) }}</mat-error
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mt-1">
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            #deliveryDate
+            capitalizeInput
+            formControlName="deliveryDate"
+            type="date"
+            class="form-control"
+            id="deliveryDate"
+            name="deliveryDate"
+          />
+          <label for="deliveryDate">Fecha de entrega</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(deliveryDate.name)"
+            >{{ controlError(deliveryDate.name) }}</mat-error
+          >
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            name="deliveryWarehouse"
+            formControlName="deliveryWarehouse"
+            type="text"
+            class="form-control"
+            id="deliveryWarehouse"
+            #deliveryWarehouse
+          />
+          <label for="deliveryWarehouse">Bodega de entrega</label>
+          <mat-error
+            class="mat-hint-error"
+            *ngIf="controlError(deliveryWarehouse.name)"
+            >{{ controlError(deliveryWarehouse.name) }}</mat-error
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mt-1">
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            name="shippingPrice"
+            capitalizeInput
+            #shippingPrice
+            formControlName="shippingPrice"
+            type="number"
+            class="form-control"
+            id="shippingPrice"
+          />
+          <label for="shippingPrice">Precio de envío</label>
+          <mat-error class="mat-hint-error" *ngIf="controlError(shippingPrice.name)">{{
+            controlError(shippingPrice.name)
+          }}</mat-error>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            name="transportId"
+            capitalizeInput
+            #transportId
+            formControlName="transportId"
+            type="transportId"
+            class="form-control"
+            id="transportId"
+            placeholder="transportId"
+          />
+          <label for="transportId">{{ logisticsType }}</label>
+          <mat-error class="mat-hint-error" *ngIf="controlError(transportId.name)">{{
+            controlError(transportId.name)
+          }}</mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mt-1">
+      <div class="col-md-6">
+        <div class="form-floating">
+          <input
+            name="guideNumber"
+            #guideNumber
+            formControlName="guideNumber"
+            type="text"
+            class="form-control"
+            id="guideNumber"
+            [maxLength]="10"
+          />
+          <label for="guideNumber">Numero de guía </label>
+          <mat-error class="mat-hint-error" *ngIf="controlError(guideNumber.name)">{{
+            controlError(guideNumber.name)
+          }}</mat-error>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating">
+          <input
+            name="discount"
+            #discount
+            formControlName="discount"
+            type="text"
+            class="form-control"
+            readonly
+            id="discount"
+            [maxLength]="10"
+          />
+          <label for="discount">Descuento </label>
+          <mat-error class="mat-hint-error" *ngIf="controlError(discount.name)">{{
+            controlError(discount.name)
+          }}</mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mt-1"></div>
+    <div class="row my-3">
+      <div class="col-6 text-center">
+        <button (click)="save()" mat-raised-button color="primary">
+          Guardar
+        </button>
+      </div>
+      <div class="col-6 text-center">
+        <button mat-raised-button (click)="cancel()" color="warn">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </fieldset>
+</form>

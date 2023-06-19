@@ -1,0 +1,36 @@
+<div class="modal-info">
+  <div class="row">
+    <div class="col-12">
+      <div class="modal-info__header mb-2">
+        <img src="../../../../../assets/img/car.png" width="25%" alt="" />
+        <span class="modal-info__btnClose" (click)="onClick('close')"
+          >X</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div  class="text-center mb-0">
+        <img width="35%" src="../../../../../../assets/modal-icon/{{ icon }}.png" alt="">
+      </div>
+      <div class="text-center fw-bold fs-1 mb-3">{{ title }}</div>
+      <div class="modal-info__body text-center" [innerHTML]="message" >
+      </div>
+    </div>
+  </div>
+  <div class="row  my-3">
+    <div class="col-12">
+      <div class="modal-info__footer">
+        <div class="row justify-content-center">
+          <div class="col-6 text-center" *ngIf="labelbtnLeft">
+            <button class="btn btn-primary" (click)="onClick(labelbtnLeft)">{{labelbtnLeft}}</button>
+          </div>
+          <div class="col-6 text-center" *ngIf="labelbtnRigth">
+            <button (click)="onClick(labelbtnRigth)" class="btn btn-danger">{{labelbtnRigth}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
