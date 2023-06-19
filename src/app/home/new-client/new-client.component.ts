@@ -9,6 +9,7 @@ import { IMessageApi } from "src/app/core/interfaces/rmessage-api.interface"
 import { ISession } from "src/app/core/interfaces/sesion.interface"
 import { Documents } from "src/app/core/parameters/documents"
 import { NotificationsService } from "src/app/core/services/notifications/notifications.service"
+import { ClientsService } from '../../core/services/apis/clients/clients.service';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class NewClientComponent implements OnInit {
   constructor(
     private notificationsService: NotificationsService,
     private fb: FormBuilder,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private clientsService: ClientsService,
   ) {
     this.form = this.fb.group({
       documentType: new FormControl(null, [Validators.required]),
@@ -40,7 +42,6 @@ export class NewClientComponent implements OnInit {
       address: new FormControl(null),
       cellphone: new FormControl(null, [Validators.required, Validators.minLength(10)]),
       email: new FormControl(null,),
-      nickname: new FormControl(null,),
       password: new FormControl(null,),
     })
   }
@@ -103,13 +104,15 @@ export class NewClientComponent implements OnInit {
   save() {
     if (this.form.invalid) {
       const mensaje = 'Faltan datos'
-      this.notificationsService.info({ titulo: 'clientes', mensaje, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
+      this.notificationsService.info({ titulo: 'Clientes', mensaje, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
       return;
     }
     const data = this.form.value
-    data.nickname = data.documentNumber
-    data.password = data.documentNumber
-
+    this.clientsService.create(data).subscribe(resp => {
+      this.notificationsService.info({ titulo: 'Informacio', mensaje: 'El Cliente fue guardado exitosamente', textButtonLeft: AppEnums.ok, icon: IconEnums.ok });
+    }, err => {
+      this.notificationsService.info({ titulo: 'Error', mensaje: err.message, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
+    })
   }
   cancel() {
     this.showForm = false

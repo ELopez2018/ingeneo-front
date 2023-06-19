@@ -1,3 +1,6 @@
+import { ITransportType } from "./Transport-type.interface";
+import { IClient } from "./client.interface";
+
 export interface ILogistics {
   id: number;
   productType: string;
@@ -7,46 +10,17 @@ export interface ILogistics {
   shippingPrice: number;
   discount: number;
   guideNumber: string;
-  store: Store;
-  client: Client;
-  transportType: TransportType;
+  store: IStore;
+  client: IClient;
+  transportType: ITransportType;
 }
 
-interface TransportType {
-  id: number;
-  description: string;
-  identificationCode: string;
-  logistics: string[];
-}
 
-interface Client {
-  id: number;
-  email: string;
-  password: string;
-  names: string;
-  lastNames: string;
-  documentNumber: number;
-  documentType: string;
-  cellPhone: number;
-  phone: number;
-  role: string;
-  enabled: boolean;
-  accountNonLocked: boolean;
-  username: string;
-  authorities: Authority[];
-  accountNonExpired: boolean;
-  credentialsNonExpired: boolean;
-  logistics: string[];
-}
 
-interface Authority {
-  authority: string;
-}
 
-interface Store {
+export interface IStore {
   id: number;
   description: string;
   type: string;
   port: string;
-  logistics: string[];
 }

@@ -7,6 +7,7 @@ import { IClient } from 'src/app/core/interfaces/client.interface';
 import { IMessageApi } from 'src/app/core/interfaces/rmessage-api.interface';
 import { TypesTransport } from 'src/app/core/parameters/documents';
 import { NotificationsService } from 'src/app/core/services/notifications/notifications.service';
+import { LogisticsService } from '../../../core/services/apis/logistics/logistics.service';
 
 @Component({
   selector: 'app-delivery-plan-form',
@@ -26,7 +27,8 @@ export class DeliveryPlanFormComponent implements OnInit {
   constructor(
     private notificationsService: NotificationsService,
     private fb: FormBuilder,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private logisticsService: LogisticsService
   ) {
     this.form = this.fb.group({
       typeLogistic: new FormControl(null, [Validators.required]),
@@ -122,12 +124,16 @@ export class DeliveryPlanFormComponent implements OnInit {
     if (this.form.invalid) {
       this.form.updateValueAndValidity()
       const mensaje = 'Faltan datos'
-      await this.notificationsService.info({ titulo: 'clientes', mensaje, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
+      await this.notificationsService.info({ titulo: 'Informacio', mensaje, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
       return;
     }
     const data = this.form.value
+    this.logisticsService.create(data).subscribe(resp => {
+      this.notificationsService.info({ titulo: 'Informacio', mensaje: 'El registro fue guardado exitosamente', textButtonLeft: AppEnums.ok, icon: IconEnums.ok });
+    }, err => {
+      this.notificationsService.info({ titulo: 'Error', mensaje: err.message, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
+    })
 
-    console.log(data);
   }
   cancel() {
     this.showForm = false

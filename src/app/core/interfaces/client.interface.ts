@@ -1,10 +1,23 @@
 export interface IClient {
-  documentType: string;
-  documentNumber: number;
+  id: number;
+  email: string;
+  password: string;
   names: string;
   lastNames: string;
-  address?: string;
+  documentNumber: number;
+  documentType: string;
   cellPhone: number;
-  email: string;
   phone: number;
+  role: string;
+  enabled: boolean;
+  accountNonLocked: boolean;
+  username: string;
+  authorities: Authority[];
+  accountNonExpired: boolean;
+  credentialsNonExpired: boolean;
+  logistics: string[];
+}
+
+interface Authority {
+  authority: string;
 }
