@@ -1,0 +1,27 @@
+.form-check-label {
+  font-size: 8px !important;
+}
+.new-client {
+  &__icon {
+    background-color: #3f51b5;
+    color: white;
+    height: 80px;
+
+    .mat-icon {
+      -webkit-user-select: none;
+      user-select: none;
+      background-repeat: no-repeat;
+      display: inline-block;
+      fill: currentColor;
+      height: 80px;
+      width: 80px;
+      overflow: hidden;
+    }
+
+    .material-icons {
+
+      font-size: 80px;
+
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.modal-login {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+
+  &__btnClose {
+    display: block;
+    position: absolute;
+    color: gray;
+    right:  20px;
+    top: 10px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__body {
+    min-height: 5vh;
+  }
+  .btn {
+    min-width: 80%;
+    max-width: 100%;
+  }
+}
