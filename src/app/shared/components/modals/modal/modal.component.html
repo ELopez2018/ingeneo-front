@@ -1,0 +1,13 @@
+<div [ngSwitch]="modalType">
+  <div *ngSwitchDefault>
+    <modal-info
+      (events)="onClick($event)"
+      [title]="title"
+      [message]="message"
+      [labelbtnLeft]="textButtonLeft"
+      [labelbtnRigth]="textButtonRigth"
+      [icon]="icon"
+    ></modal-info>
+  </div>
+
+</div>

@@ -1,0 +1,65 @@
+<div class="modal-login">
+  <div class="row">
+    <div class="col-12">
+      <div class="modal-login__header mb-2">
+        <span class="modal-login__btnClose" (click)="onClick('close')"
+          >X</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div  class="text-center mb-0">
+        <img width="35%" src="../../../../../../assets/modal-icon/{{ icon }}.png" alt="">
+      </div>
+      <div class="text-center fw-bold fs-1 mb-3">{{ title }}</div>
+      <div class="modal-login__body text-center px-4" [formGroup]="form" >
+        <div class="form-floating mb-2">
+          <input
+            #email
+            name="email"
+            formControlName="email"
+            type="text"
+            class="form-control"
+            id="email"
+            placeholder="Ingrese su correo electronico"
+          />
+          <label for="floatingInputGrid">Correo electronico</label>
+          <mat-hint class="mat-hint" *ngIf="!controlError(email.name)">Correo electronico</mat-hint>
+          <mat-error class="mat-hint-error" *ngIf="controlError(email.name)">{{ controlError(email.name)
+            }}</mat-error>
+        </div>
+        <div class="form-floating">
+          <input
+            #password
+            name="password"
+            formControlName="password"
+            type="password"
+            class="form-control"
+            id="floatingInputGrid"
+            placeholder="Ingrese Su contraseña"
+          />
+          <label for="floatingInputGrid">Contraseña</label>
+          <mat-hint class="mat-hint" *ngIf="!controlError(password.name)">Contraseña</mat-hint>
+          <mat-error class="mat-hint-error" *ngIf="controlError(password.name)">{{ controlError(password.name)
+            }}</mat-error>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row  my-3">
+    <div class="col-12">
+      <div class="modal-login__footer">
+        <div class="row justify-content-center">
+          <div class="col-6 text-center" *ngIf="labelbtnLeft">
+            <button class="btn btn-primary" (click)="onClick(labelbtnLeft)">{{labelbtnLeft}}</button>
+          </div>
+          <div class="col-6 text-center" *ngIf="labelbtnRigth">
+            <button (click)="onClick(labelbtnRigth)" class="btn btn-danger">{{labelbtnRigth}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
