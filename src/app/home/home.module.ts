@@ -7,10 +7,11 @@ import { HomeComponent } from './home.component';
 import { DeliveryPlanComponent } from './delivery-plan/delivery-plan.component';
 import { NewClientComponent } from './new-client/new-client.component';
 import { DeliveryPlanFormComponent } from './delivery-plan/delivery-plan-form/delivery-plan-form.component';
+import { TransportTypeComponent } from './transport-type/transport-type.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, DeliveryPlanComponent, NewClientComponent, DeliveryPlanFormComponent],
+  declarations: [HomeComponent, DeliveryPlanComponent, NewClientComponent, DeliveryPlanFormComponent, TransportTypeComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

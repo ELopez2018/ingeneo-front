@@ -10,6 +10,7 @@ import { ISession } from "src/app/core/interfaces/sesion.interface"
 import { Documents } from "src/app/core/parameters/documents"
 import { NotificationsService } from "src/app/core/services/notifications/notifications.service"
 import { ClientsService } from '../../core/services/apis/clients/clients.service';
+import { Router } from "@angular/router"
 
 
 @Component({
@@ -33,6 +34,7 @@ export class NewClientComponent implements OnInit {
     private fb: FormBuilder,
     public activeModal: NgbActiveModal,
     private clientsService: ClientsService,
+    private route: Router
   ) {
     this.form = this.fb.group({
       documentType: new FormControl(null, [Validators.required]),
@@ -47,8 +49,14 @@ export class NewClientComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAllClient()
   }
-
+  getAllClient() {
+    this.clientsService.getAll().subscribe(
+      resp => {
+        this.clientList = resp
+      })
+  }
   filtrar() {
   }
   showModal() {
@@ -110,8 +118,10 @@ export class NewClientComponent implements OnInit {
     const data = this.form.value
     this.clientsService.create(data).subscribe(resp => {
       this.notificationsService.info({ titulo: 'Informacio', mensaje: 'El Cliente fue guardado exitosamente', textButtonLeft: AppEnums.ok, icon: IconEnums.ok });
+      this.getAllClient()
     }, err => {
       this.notificationsService.info({ titulo: 'Error', mensaje: err.message, textButtonLeft: AppEnums.ok, icon: IconEnums.stop });
+      this.getAllClient()
     })
   }
   cancel() {
@@ -123,5 +133,12 @@ export class NewClientComponent implements OnInit {
   userClicked(user: IClient) {
     this.userSelected.emit(user)
     this.activeModal.close(user)
+  }
+
+  back() {
+    if (this.route.url.includes("/client")) {
+      this.route.navigateByUrl("inicio")
+    }
+    this.activeModal.close()
   }
 }

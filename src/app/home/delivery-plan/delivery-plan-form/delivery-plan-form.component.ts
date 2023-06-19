@@ -16,6 +16,7 @@ import { LogisticsService } from '../../../core/services/apis/logistics/logistic
 })
 export class DeliveryPlanFormComponent implements OnInit {
   @Input() showForm: boolean = true
+  @Input() client: IClient = <IClient>{}
   form: FormGroup = new FormGroup({})
   documentSelectBox = TypesTransport
   control!: AbstractControl | null;

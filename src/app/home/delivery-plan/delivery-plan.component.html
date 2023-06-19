@@ -10,14 +10,16 @@
             disabled
             readonly
             capitalizeInput
-            aria-label="Chofer"
+            aria-label="Cliente"
             aria-describedby="button-addon2"
             placeholder="Seleccione el Cliente"
+            [(ngModel)]="nameClien"
           />
           <button
             class="btn btn-outline-secondary"
             type="button"
             id="button-addon2"
+            (click)="seletcClient()"
           >
             <mat-icon>search</mat-icon>
           </button>
@@ -28,4 +30,4 @@
   </div>
 </div>
 
-<app-delivery-plan-form></app-delivery-plan-form>
+<app-delivery-plan-form *ngIf="client" [client] ="client"></app-delivery-plan-form>
